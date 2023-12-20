@@ -47,6 +47,7 @@ An example of expoarations from our GM0VQVAE can be found in this Jupyter notebo
 
 https://github.com/vicely07/GM-VQVAE-Uncertainty-Contouring/blob/main/export-example.ipynb
 
+
 ## Training & Evaluation
 ## Dataset:
 We used a dataset of deidentified CT scans extracted from MD Anderson Cancer clinical software (Ray Station), and the data is deidentified. Regarding the inclusion/exclusion criteria, we include subjects who have all 3 ROI of the prostate, bladder, and rectum presented in the CT scans. Thus, we exclude subjects who are labeled “prostate-fossa”, which means the subject has their prostate removed due to cancer. The data consists of 159 subjects. Due to the difference in length of the ROIs in the human body, the number of 2D slices are consequently split into 8,956 for prostates, 22,668 for rectum, 6,334 for bladder, and 22,668 for joint ROI. The training-validation-testing ratio is 80-10-10. In our training, we use a batch size of 32.
