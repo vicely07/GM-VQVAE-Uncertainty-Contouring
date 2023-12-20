@@ -4,28 +4,43 @@ This study focuses on addressing uncertainties in contouring for radiation thera
 ## Methods:
 For the task of uncertainty contouring, we will build a pipeline with GM-VQVAE generator in the center. Our deep learning approach focuses on the probability map from a segmentation algorithm. The probability map is then reconstructed using GM-VQVAE to extract the latent space. In brief, GM-VQVAE is a VAE with discrete latent space as a result from vector quantisation (VQ) and scaled attention from Gaussian Mixture (GM). The encoder architecture is composed of two strided convolutional layers with a stride of 2 and a window size of 4 × 4, succeeded by two residual blocks with a 3 × 3 configuration (implemented as ReLU activation, followed by a 3x3 convolution, another ReLU activation, and a 1x1 convolution), all containing 256 hidden units. Similarly, the decoder comprises two residual blocks followed by two transposed convolutions with a stride of 2 and a window size of 4 × 4.  The the number of clusters for GM is 64, number of discrete latent space for VQ is 1024, the number of residual blocks is 2, residual channels is 8 and convolutional channels is 128 We utilize the Adam optimizer with a learning rate of 1e-6 and evaluate the model's performance after 20,000-71,000 training steps depending on the organ, using a batch size of 32.
 
-Fig 1 - Pipeline
+<img src="https://github.com/vicely07/GM-VQVAE-Uncertainty-Contouring-Pipeline/blob/main/illustrations/Fig1-Pipeline-overview.png" width="600" height="400">
+
+*Fig 1: Overview of the uncertainty contouring pipeline*
 
 In building the GM-VQVAE model, we introduced the concept of "GM as Weighted Scale". This means that the continuous latent space z from GM-based encoder is used as the weighted scale vector.
 
-Fig 2 - Model
+<img src="https://github.com/vicely07/GM-VQVAE-Uncertainty-Contouring-Pipeline/blob/main/illustrations/Fig2-Model-Overview.png" width="600" height="400">
+
+*Fig 2: Structure of GM-VQVAE model*
 
 The latent space from the GM-VQVAE model is a good representation of the original probability map in a lower dimension and, because this space is Gaussian distributed, we can modify this space by adjusting the mean to control to control the shape. To extract uncertainty contours, we process the adjusted probability map through a thresholding layer to control the size. We have the flexibility to control the contour's size by varying the threshold levels on the Gaussian probability map. Given the multiple options for shaping (mean-level adjustment) and sizing (threshold adjustment), we systematically evaluate distance-based metrics to identify an optimal set of parameters that consistently yield acceptable uncertainty contours.
 
-Fig 3
+<img src="https://github.com/vicely07/GM-VQVAE-Uncertainty-Contouring-Pipeline/blob/main/illustrations/Fig5-Shape-size-params.png" width="600" height="400">
+
+*Fig 3: Impacts of shape and size paramters*
+
+Table 1: Comaparison
+<img src="https://github.com/vicely07/GM-VQVAE-Uncertainty-Contouring-Pipeline/blob/main/illustrations/Fig3-Model-Comparison.PNG" width="600" height="400">
 
 As in table 1, we found that the GM-VQVAE outperforms all other models with Surface DSC (HD) of 0.964 (23.537), 0.934 (25.815), 0.972 (21.013), 0.945 (20.912) for prostate, rectum, bladder and joint ROI respectively. 
+<img src="https://github.com/vicely07/GM-VQVAE-Uncertainty-Contouring-Pipeline/blob/main/illustrations/Fig4-Reconstruction-Visualization.png" width="600" height="400">
 
- Table 1
+*Fig 4: Examples of reconstructed masks from VAE-based models*
+
 
 # Exportation for Clinical Use:
 ## Install
+```
 pip install -r requirement.txt
 git clone https://github.com/deepmind/surface-distance.git
 pip install surface-distance/
+```
 
 ## Export:
-python export.py
+```
+python export.py -i input/ -id "subject1" -o output/ -s "[5, 10]" -t "[0.3]"
+```
 
 ## Training & Evaluation
 ## Dataset:
@@ -35,23 +50,33 @@ We used a dataset of deidentified CT scans extracted from MD Anderson Cancer cli
 # Prepare the data:
 ## Extract nnUnet segmentation:
 ## 1. Process data for nnUnet:
+```
 cd utils
 python dcm2nii.py --input_path ..data/input/dicom_ct/ --output_path ..data/input/nifti_formatted_ct/
+```
 
 ## 2. nnUnet segmentation extraction:
+```
 cd nnUnet/nnUNet
 pip install -e .
 nnUNet_predict -i ../data/input/seg/nifti_formatted_ct/ -o ../data/input/seg/3d_masks -t Task201_Prostate -m 3d_fullres
 nnUNet_predict -i ../data/input/seg/nifti_formatted_ct/ -o ../data/input/seg/3d_masks -t Task202_Bladder -m 3d_fullres
 nnUNet_predict -i ../data/input/seg/nifti_formatted_ct/ -o ../data/input/seg/3d_masks -t Task203_Rectum -m 3d_fullres
+```
 
 ## 3. Extract slices from 3d segmentation masks:
+```
 python extract_slices --input_path ../../data/seg/3d_masks/Prostate --output_mask ../../data/seg/2d_slices
+```
 
 ## Organize slices into test
 
 ## Training:
+```
 python train.py
+```
 
 ## Evaluation:
+```
 python eval.py
+```
