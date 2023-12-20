@@ -31,7 +31,6 @@ Table 1: Comaparison of VAE-based model:
 
 *Fig 4: Examples of reconstructed masks from VAE-based models*
 
-
 # Exportation for Clinical Use:
 ## Install
 ```
