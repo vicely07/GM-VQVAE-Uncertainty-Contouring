@@ -10,7 +10,7 @@ For the task of uncertainty contouring, we will build a pipeline with GM-VQVAE g
 
 In building the GM-VQVAE model, we introduced the concept of "GM as Weighted Scale". This means that the continuous latent space z from GM-based encoder is used as the weighted scale vector.
 
-<img src="https://github.com/vicely07/GM-VQVAE-Uncertainty-Contouring-Pipeline/blob/main/illustrations/Fig2-Model-Overview.png" width="700" height="400">
+<img src="https://github.com/vicely07/GM-VQVAE-Uncertainty-Contouring-Pipeline/blob/main/illustrations/Fig2-Model-Overview.png" width="800" height="400">
 
 *Fig 2: Structure of GM-VQVAE model*
 
