@@ -20,11 +20,13 @@ The latent space from the GM-VQVAE model is a good representation of the origina
 
 *Fig 3: Impacts of shape and size paramters*
 
+
+
+As in table 1, we found that the GM-VQVAE outperforms all other models with Surface DSC (HD) of 0.964 (23.537), 0.934 (25.815), 0.972 (21.013), 0.945 (20.912) for prostate, rectum, bladder and joint ROI respectively. 
 Table 1: Comaparison of VAE-based model:
 
 <img src="https://github.com/vicely07/GM-VQVAE-Uncertainty-Contouring-Pipeline/blob/main/illustrations/Fig3-Model-Comparison.PNG" width="700" height="400">
 
-As in table 1, we found that the GM-VQVAE outperforms all other models with Surface DSC (HD) of 0.964 (23.537), 0.934 (25.815), 0.972 (21.013), 0.945 (20.912) for prostate, rectum, bladder and joint ROI respectively. 
 <img src="https://github.com/vicely07/GM-VQVAE-Uncertainty-Contouring-Pipeline/blob/main/illustrations/Fig4-Reconstruction-Visualization.png" width="700" height="400">
 
 *Fig 4: Examples of reconstructed masks from VAE-based models*
